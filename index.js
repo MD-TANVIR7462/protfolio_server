@@ -29,6 +29,7 @@ async function run() {
     const collection = db.collection("adminUser");
     const skillsCollection = db.collection("skills");
     const projectCollection = db.collection("project");
+    const profileCollection = db.collection("profile");
 
     // User Registration
     app.post("/api/v1/register", async (req, res) => {
@@ -125,7 +126,7 @@ async function run() {
       }
     });
 
-    //profile image and description//
+    //projects//
     app.get("/api/v1/projects", async (req, res) => {
       try {
         const projects = await projectCollection.find({}).toArray();
@@ -159,6 +160,45 @@ async function run() {
         const errorData = {
           success: false,
           message: "Can't Create A skill",
+        };
+        res.status(500).send(errorData);
+      }
+    });
+
+    //profile image and description//
+    app.get("/api/v1/profile", async (req, res) => {
+      try {
+        const data = await profileCollection.find({}).toArray();
+        const result = {
+          success: true,
+          message: "profile retrived successfully",
+          data: data,
+        };
+        res.status(200).json(result);
+      } catch (err) {
+        const errorData = {
+          success: false,
+          console: err,
+          message: "Can't Retrived the projects",
+        };
+        res.status(500).send(errorData);
+      }
+    });
+
+    app.post("/api/v1/profile", async (req, res) => {
+      const bodyData = req.body;
+      try {
+        const data = await profileCollection.insertOne(bodyData);
+        const result = {
+          success: true,
+          message: "profile added successfully",
+          data: data,
+        };
+        res.status(200).send(result);
+      } catch (err) {
+        const errorData = {
+          success: false,
+          message: "Can't Create A profile",
         };
         res.status(500).send(errorData);
       }
