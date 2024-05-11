@@ -30,6 +30,7 @@ async function run() {
     const skillsCollection = db.collection("skills");
     const projectCollection = db.collection("project");
     const profileCollection = db.collection("profile");
+    const experienceCollection = db.collection("experience");
 
     // User Registration
     app.post("/api/v1/register", async (req, res) => {
@@ -199,6 +200,44 @@ async function run() {
         const errorData = {
           success: false,
           message: "Can't Create A profile",
+        };
+        res.status(500).send(errorData);
+      }
+    });
+    //Experience//
+    app.get("/api/v1/experience", async (req, res) => {
+      try {
+        const data = await experienceCollection.find({}).toArray();
+        const result = {
+          success: true,
+          message: "experience retrived successfully",
+          data: data,
+        };
+        res.status(200).json(result);
+      } catch (err) {
+        const errorData = {
+          success: false,
+          console: err,
+          message: "Can't Retrived the experience",
+        };
+        res.status(500).send(errorData);
+      }
+    });
+
+    app.post("/api/v1/experience", async (req, res) => {
+      const bodyData = req.body;
+      try {
+        const data = await experienceCollection.insertOne(bodyData);
+        const result = {
+          success: true,
+          message: "experience added successfully",
+          data: data,
+        };
+        res.status(200).send(result);
+      } catch (err) {
+        const errorData = {
+          success: false,
+          message: "Can't Create  experience",
         };
         res.status(500).send(errorData);
       }
