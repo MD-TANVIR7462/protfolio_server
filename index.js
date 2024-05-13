@@ -153,18 +153,19 @@ async function run() {
         const project = await projectCollection.insertOne(data);
         const projectData = {
           success: true,
-          message: "skills added successfully",
+          message: "Project added successfully",
           data: project,
         };
         res.status(200).send(projectData);
       } catch (err) {
         const errorData = {
           success: false,
-          message: "Can't Create A skill",
+          message: "Can't Create A Project",
         };
         res.status(500).send(errorData);
       }
     });
+
 
     //profile image and description//
     app.get("/api/v1/profile", async (req, res) => {
